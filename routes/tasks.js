@@ -34,8 +34,41 @@ router.post('/tasks',(req, res) =>{
         res.status(201).json({message: 'Task added', id:result.insertId});
     });
 });
+
 //PUT update a task (marks done)
+router.put('/tasks/:id' , (req, res) => {
+    const {id} = req.params;
+    const query = 'update tasks set done = true where id = ?';
+    db.query(query, [id], (err, result) => {
+        if(err){
+            res.status(500).json({error : 'Failed to update task !'});
+            return;
+        }
+        if(result.affectedRows == 0)
+        {
+            res.status(404).json({error:'Task not found !'});
+            return;
+        }
+        res.status(200).json({message : 'Task updated '});
+    });
+});
+
 //DELETE a task
-
-
+router.delete('/tasks/:id', (req, res) => {
+    const {id} = req.params;
+    const query = 'delete from tasks where id = ?';
+    db.query(query, [id], (err,result) =>{
+        if(err)
+        {
+            res.status(500).json({error : 'Failed to delete task !'});
+            return;
+        }
+        if(result.affectedRows == 0)
+        {
+            res.status(404).json({error : 'Task not Found!'});
+            return;
+        } 
+        res.status(200).json({message : 'Task deleted successfully'});
+    });
+});
 module.exports = router;
