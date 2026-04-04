@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-
+//fixing gmail configuration 
 //GET all tasks
 router.get('/tasks', (req , res) => {
     const query = 'SELECT * FROM tasks';
