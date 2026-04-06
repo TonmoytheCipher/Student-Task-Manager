@@ -9,6 +9,12 @@ function loadTasks() {
             tasks.forEach(tasks => {
                 const li = document.createElement('li');
                 li.textContent = tasks.title;
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.onclick = () => deleteTask(tasks.id); 
+
+                li.appendChild(deleteBtn);
                 taskList.appendChild(li);
             });
         });
@@ -34,6 +40,16 @@ function addTask(){
             input.value = '';
             loadTasks();
         });
+        
 
+}
 
+function deleteTask(id){
+        fetch(`${API}/tasks/${id}`, {
+            method : 'DELETE'
+        })
+        .then(res => res.json())
+        .then(() => {
+            loadTasks();
+        });
 }
