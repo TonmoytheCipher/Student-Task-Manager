@@ -10,10 +10,20 @@ function loadTasks() {
                 const li = document.createElement('li');
                 li.textContent = tasks.title;
 
+                if(tasks.done)
+                {
+                    li.style.textDecoration = 'line-through';
+                }
+
+                const doneBtn = document.createElement('button');
+                doneBtn.textContent = 'Done';
+                doneBtn.onclick = () => markDone(tasks.id);
+
                 const deleteBtn = document.createElement('button');
                 deleteBtn.textContent = 'Delete';
                 deleteBtn.onclick = () => deleteTask(tasks.id); 
 
+                li.appendChild(doneBtn);
                 li.appendChild(deleteBtn);
                 taskList.appendChild(li);
             });
@@ -48,6 +58,16 @@ function deleteTask(id){
         fetch(`${API}/tasks/${id}`, {
             method : 'DELETE'
         })
+        .then(res => res.json())
+        .then(() => {
+            loadTasks();
+        });
+}
+
+function markDone(id){
+    fetch(`${API}/tasks/${id}` , {
+        method : 'PUT'
+    })
         .then(res => res.json())
         .then(() => {
             loadTasks();
