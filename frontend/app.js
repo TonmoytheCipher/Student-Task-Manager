@@ -17,10 +17,12 @@ function loadTasks() {
 
                 const doneBtn = document.createElement('button');
                 doneBtn.textContent = 'Done';
+                doneBtn.className = 'done-btn';
                 doneBtn.onclick = () => markDone(tasks.id);
 
                 const deleteBtn = document.createElement('button');
                 deleteBtn.textContent = 'Delete';
+                deleteBtn.className = 'delete-btn';
                 deleteBtn.onclick = () => deleteTask(tasks.id); 
 
                 li.appendChild(doneBtn);
