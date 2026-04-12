@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-//fixing gmail configuration 
-//GET all tasks
-router.get('/tasks', (req , res) => {
+const authentication = require('../middleware/auth.js');
+
+router.get('/tasks',authentication,(req , res) => {
     const query = 'SELECT * FROM tasks';
     db.query(query, (err , result) => {
         if(err) {
@@ -15,8 +15,8 @@ router.get('/tasks', (req , res) => {
 
 });
 
-//POST a new tasks
-router.post('/tasks',(req, res) =>{
+
+router.post('/tasks',authentication,(req, res) =>{
     const {title} = req.body;
     // const title = req.body.title; // same
     if(!title)
@@ -35,8 +35,7 @@ router.post('/tasks',(req, res) =>{
     });
 });
 
-//PUT update a task (marks done)
-router.put('/tasks/:id' , (req, res) => {
+router.put('/tasks/:id' ,authentication ,(req, res) => {
     const {id} = req.params;
     const query = 'update tasks set done = true where id = ?';
     db.query(query, [id], (err, result) => {
@@ -53,8 +52,7 @@ router.put('/tasks/:id' , (req, res) => {
     });
 });
 
-//DELETE a task
-router.delete('/tasks/:id', (req, res) => {
+router.delete('/tasks/:id',authentication ,(req, res) => {
     const {id} = req.params;
     const query = 'delete from tasks where id = ?';
     db.query(query, [id], (err,result) =>{
