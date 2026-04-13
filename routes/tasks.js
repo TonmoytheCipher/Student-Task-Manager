@@ -4,8 +4,9 @@ const db = require('../db');
 const authentication = require('../middleware/auth.js');
 
 router.get('/tasks',authentication,(req , res) => {
-    const query = 'SELECT * FROM tasks';
-    db.query(query, (err , result) => {
+    const user_id = req.user.id;
+    const query = 'SELECT * FROM tasks WHERE user_id = ?';
+    db.query(query,[user_id] ,(err , result) => {
         if(err) {
             res.status(500).json({error: 'failed to fetch tasks'});
             return;
@@ -24,8 +25,9 @@ router.post('/tasks',authentication,(req, res) =>{
         res.status(400).json({error:'Title is required'});
         return;
     }
-    const query = 'INSERT INTO tasks (title) VALUES(?)';
-    db.query(query, [title], (err, result) => {
+    const user_id = req.user.id;
+    const query = 'INSERT INTO tasks (title, user_id) VALUES(?,?)';
+    db.query(query, [title,user_id], (err, result) => {
         if(err)
         {
             res.status(500).json({error:'Failed to add task'});
