@@ -1,5 +1,21 @@
 const API = 'http://localhost:3000/api';
 
+function showLogin() {
+    document.getElementById('loginForm').style.display = 'block'; //show
+    document.getElementById('registerForm').style.display = 'none'; //hide    
+}
+
+function showRegister() {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('registerForm').style.display = 'block';
+}
+
+function logout() {
+    localStorage.removeItem('token');
+    document.getElementById('taskSection').style.display = 'none';
+    document.getElementById('authSection').style.display = 'block';
+}
+
 function loadTasks() {
     fetch(`${API}/tasks`)
         .then(res => res.json())
