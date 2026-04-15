@@ -1,5 +1,65 @@
 const API = 'http://localhost:3000/api';
 
+function login() {
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    if(!username || !password)
+    {
+        document.getElementById('message').textContent = "Please fill up all the field !";
+        return;
+    }
+    fetch(`${API}/auth/login` , {
+        method : 'POST',
+        headers : {'Content-type' : 'application/json'},
+        body : JSON.stringify({username, password})
+
+    })
+        .then(res => res.json())
+        .then(data => {
+            if(data.token)
+            {
+                localStorage.setItem('token',data.token);
+                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('taskSection').style.display = 'block';
+                loadTasks();
+            }
+            else
+            {
+                document.getElementById('message').textContent = data.error;
+            }
+        });
+}
+
+function register()
+{
+    const username = document.getElementById('regUsername').value.trim();
+    const password = document.getElementById('regPassword').value.trim();
+    if(!username || !password)
+    {
+        document.getElementById('message').textContent = 'Please fill up all the field !'
+        return;
+    }
+    fetch(`${API}/auth/register`, {
+        method : 'POST',
+        headers : {'Content-type' : 'application/json'},
+        body : JSON.stringify({username, password})
+    })
+        .then(res => res.json())
+        .then(data => {
+            if(data.message) {
+                document.getElementById('message').textContent = 'Registered ! please login.';
+                showLogin();
+
+            }
+            else
+            {
+                document.getElementById('message').textContent = data.error;
+            }
+        });
+
+
+}
+
 function showLogin() {
     document.getElementById('loginForm').style.display = 'block'; //show
     document.getElementById('registerForm').style.display = 'none'; //hide    
@@ -17,7 +77,11 @@ function logout() {
 }
 
 function loadTasks() {
-    fetch(`${API}/tasks`)
+    fetch(`${API}/tasks` , {
+       headers : { 
+            'Authorization' : `Bearer ${localStorage.getItem('token')}`
+        }
+    })
         .then(res => res.json())
         .then(tasks => {
             const taskList = document.getElementById('taskList');
@@ -52,7 +116,7 @@ loadTasks();
 
 function addTask(){
     const input = document.getElementById('taskInput');
-    const title = input.value.trim(); //reducing unwanted space in fornt and back
+    const title = input.value.trim(); 
     if(!title)
     {
         alert('Please enter a task !');
@@ -60,7 +124,8 @@ function addTask(){
     }
     fetch(`${API}/tasks` , {
         method : 'POST',
-        headers : {'Content-Type' : 'application/json'},
+        headers : {'Content-Type' : 'application/json',
+                'Authorization' : `Bearer ${localStorage.getItem('token')}`},
         body : JSON.stringify({title : title })
     })
         .then(res => res.json())
@@ -74,7 +139,10 @@ function addTask(){
 
 function deleteTask(id){
         fetch(`${API}/tasks/${id}`, {
-            method : 'DELETE'
+            method : 'DELETE',
+            headers: {
+                'Authorization' : `Bearer ${localStorage.getItem('token')}`
+            }
         })
         .then(res => res.json())
         .then(() => {
@@ -84,7 +152,11 @@ function deleteTask(id){
 
 function markDone(id){
     fetch(`${API}/tasks/${id}` , {
-        method : 'PUT'
+        'Authorization' : `Bearer ${localStorage.getItem('token')}`,
+        method : 'PUT',
+        headers : {
+             'Authorization' : `Bearer ${localStorage.getItem('token')}`
+        }
     })
         .then(res => res.json())
         .then(() => {
