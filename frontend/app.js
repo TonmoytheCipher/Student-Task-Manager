@@ -21,6 +21,8 @@ function login() {
                 localStorage.setItem('token',data.token);
                 document.getElementById('authSection').style.display = 'none';
                 document.getElementById('taskSection').style.display = 'block';
+                document.getElementById('loginUsername').value = '';
+                document.getElementById('loginPassword').value = '';
                 loadTasks();
             }
             else
@@ -47,7 +49,9 @@ function register()
         .then(res => res.json())
         .then(data => {
             if(data.message) {
-                document.getElementById('message').textContent = 'Registered ! please login.';
+                document.getElementById('message').textContent = 'Registration Successful ! please login.';
+                document.getElementById('regUsername').value ='';
+                document.getElementById('regPassword').value ='';
                 showLogin();
 
             }
@@ -112,8 +116,6 @@ function loadTasks() {
         });
 }
 
-loadTasks();
-
 function addTask(){
     const input = document.getElementById('taskInput');
     const title = input.value.trim(); 
@@ -152,7 +154,6 @@ function deleteTask(id){
 
 function markDone(id){
     fetch(`${API}/tasks/${id}` , {
-        'Authorization' : `Bearer ${localStorage.getItem('token')}`,
         method : 'PUT',
         headers : {
              'Authorization' : `Bearer ${localStorage.getItem('token')}`
