@@ -90,13 +90,16 @@ function loadTasks() {
         .then(tasks => {
             const taskList = document.getElementById('taskList');
             taskList.innerHTML = '';
+            tasks.sort((a,b) => a.done - b.done); 
             tasks.forEach(tasks => {
                 const li = document.createElement('li');
-                li.textContent = tasks.title;
-
+                const titleSpan = document.createElement('span');
+                // li.textContent = tasks.title;
+                titleSpan.textContent = tasks.title;
                 if(tasks.done)
                 {
-                    li.style.textDecoration = 'line-through';
+                    titleSpan.style.textDecoration = 'line-through';
+                    titleSpan.textDecoration = '#aaaa';
                 }
 
                 const doneBtn = document.createElement('button');
@@ -108,7 +111,7 @@ function loadTasks() {
                 deleteBtn.textContent = 'Delete';
                 deleteBtn.className = 'delete-btn';
                 deleteBtn.onclick = () => deleteTask(tasks.id); 
-
+                li.appendChild(titleSpan);
                 li.appendChild(doneBtn);
                 li.appendChild(deleteBtn);
                 taskList.appendChild(li);
