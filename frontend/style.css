@@ -6,10 +6,12 @@
 }
 
 body {
-    background-color: #f0f2f5;
+    background-image: url(./images/japan-background-digital-art.jpg);
+    background-size: cover;
+    background-attachment: fixed;
     display: flex;
     justify-content: center;
-    padding: 40px;
+    padding: 50px;
 }
 
 .container {
@@ -75,6 +77,12 @@ li {
 
 .delete-btn {
     background-color: #ef4444;
+    color: white;
+    font-size: 12px;
+    padding: 6px 10px;
+}
+.undo-btn {
+    background-color: #f59e0b;
     color: white;
     font-size: 12px;
     padding: 6px 10px;

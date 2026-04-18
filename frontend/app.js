@@ -99,13 +99,13 @@ function loadTasks() {
                 if(tasks.done)
                 {
                     titleSpan.style.textDecoration = 'line-through';
-                    titleSpan.textDecoration = '#aaaa';
+                    titleSpan.style.color = '#aaa';
                 }
 
                 const doneBtn = document.createElement('button');
-                doneBtn.textContent = 'Done';
-                doneBtn.className = 'done-btn';
-                doneBtn.onclick = () => markDone(tasks.id);
+                doneBtn.textContent = tasks.done ?'Undo':'Done';
+                doneBtn.className =  tasks.done? 'undo-btn':'done-btn';
+                doneBtn.onclick = () => tasks.done? undoTask(tasks.id): markDone(tasks.id);
 
                 const deleteBtn = document.createElement('button');
                 deleteBtn.textContent = 'Delete';
@@ -164,6 +164,19 @@ function markDone(id){
     })
         .then(res => res.json())
         .then(() => {
+            loadTasks();
+        });
+
+}
+
+function undoTask(id) {
+    fetch(`${API}/tasks/${id}/undo`, {
+        method: 'PUT',
+        headers: { 'Authorization' : `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+        .then(res => res.json())
+        .then(() =>{
             loadTasks();
         });
 }

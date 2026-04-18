@@ -71,4 +71,19 @@ router.delete('/tasks/:id',authentication ,(req, res) => {
         res.status(200).json({message : 'Task deleted successfully'});
     });
 });
+
+router.put('/tasks/:id/undo', authentication, (req,res) => {
+    const {id} = req.params;
+    const query = 'update tasks set done = false where id = ?';
+    db.query(query, [id],(err, result)  => {
+        if(err)
+        {
+            res.status(500).json({erro: 'Failed to undo task!'});
+            return;
+        }
+        res.status(200).json({message: 'Task undone'});
+    });
+});
+
+
 module.exports = router;
