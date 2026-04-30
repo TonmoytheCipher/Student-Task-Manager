@@ -15,7 +15,7 @@ function login() {
 
     })
         .then(res => res.json())
-        .then(data => {
+        .then(data => { 
             if(data.token)
             {
                 localStorage.setItem('token',data.token);
@@ -179,4 +179,10 @@ function undoTask(id) {
         .then(() =>{
             loadTasks();
         });
+}
+
+function showWelcome() {
+    const token = localStorage.getItem('token')
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    document.getElementById('welcomeMessage').textContent = `Welcome, ${payload.username}!`;
 }
