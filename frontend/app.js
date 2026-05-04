@@ -90,7 +90,11 @@ function loadTasks() {
         .then(tasks => {
             const taskList = document.getElementById('taskList');
             taskList.innerHTML = '';
+            showWelcome();
             tasks.sort((a,b) => a.done - b.done); 
+            if(tasks.length == 0) {
+                taskList.innerHTML = '<p style= "text-align:center; color:#aaa; margin-top:20px;">No task added yet...Add one above !</p>';
+            }
             tasks.forEach(tasks => {
                 const li = document.createElement('li');
                 const titleSpan = document.createElement('span');
@@ -182,7 +186,20 @@ function undoTask(id) {
 }
 
 function showWelcome() {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
     const payload = JSON.parse(atob(token.split('.')[1]));
     document.getElementById('welcomeMessage').textContent = `Welcome, ${payload.username}!`;
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const taskInput = document.getElementById('taskInput');
+    if(taskInput) 
+    {
+        taskInput.addEventListener('keypress', (e) => {
+            if(e.key == 'Enter')
+            {
+                addTask();
+            }
+        });
+    }
+});
