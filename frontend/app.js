@@ -138,7 +138,12 @@ function addTask(){
         body : JSON.stringify({title : title })
     })
         .then(res => res.json())
-        .then(() => {
+        .then((data) => {
+            if(data.error)
+            {
+                alert(data.error);
+                return;
+            }
             input.value = '';
             loadTasks();
         });

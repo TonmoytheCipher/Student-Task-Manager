@@ -26,15 +26,27 @@ router.post('/tasks',authentication,(req, res) =>{
         return;
     }
     const user_id = req.user.id;
-    const query = 'INSERT INTO tasks (title, user_id) VALUES(?,?)';
-    db.query(query, [title,user_id], (err, result) => {
-        if(err)
-        {
-            res.status(500).json({error:'Failed to add task'});
+    const check = 'select * from tasks where title = ? AND user_id = ? AND done = false';
+    db.query(check, [title, user_id], (err, results) => {
+        if(err){
+            res.status(500).json({error:'Failed to check tasks !'});
             return;
         }
-        res.status(201).json({message: 'Task added', id:result.insertId});
-    });
+        if(results.length > 0)
+        {
+            res.status(400).json({error: 'Task already exist !'});
+            return;
+        }
+        const query = 'INSERT INTO tasks (title, user_id) VALUES(?,?)';
+        db.query(query, [title,user_id], (err, result) => {
+            if(err)
+            {
+                res.status(500).json({error:'Failed to add task'});
+                return;
+            }
+            res.status(201).json({message: 'Task added', id:result.insertId});
+        });
+    });    
 });
 
 router.put('/tasks/:id' ,authentication ,(req, res) => {
