@@ -8,7 +8,7 @@ const PORT = 3000;
 
 app.use(express.json());
 app.use('/api/auth', authRoutes);
-app.use('/api',taskRoutes);
+app.use('/api', taskRoutes);
 app.use(express.static('frontend'));
 
 app.listen(PORT, () => {

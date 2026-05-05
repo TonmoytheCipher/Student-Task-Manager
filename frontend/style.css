@@ -89,15 +89,19 @@ li {
 }
 
 #welcomeMessage {
-    font-size: 24px;
-    color: orange;
-    margin-top: 4px;
-    font-weight: 500;
+    font-size: 14px;
+    color: #f59e0b;
+    font-weight: 600;
+    margin-top: 2px;
 }
-
 .top-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
 }
+.top-bar-left {
+    display: flex;
+    flex-direction: column;
+}
+

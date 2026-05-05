@@ -208,3 +208,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+window.onload = () => {
+    const token = localStorage.getItem('token');
+    if(token)
+    {
+        document.getElementById('authSection').style.display = 'none'; //hide
+        document.getElementById('taskSection').style.display = 'block'; //show
+        loadTasks();
+    }
+};
