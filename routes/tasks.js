@@ -51,18 +51,27 @@ router.post('/tasks',authentication,(req, res) =>{
 
 router.put('/tasks/:id' ,authentication ,(req, res) => {
     const {id} = req.params;
-    const query = 'update tasks set done = true where id = ?';
-    db.query(query, [id], (err, result) => {
+    const user_id = req.user.id;
+    const query = 'update tasks set done = true where id = ? AND user_id = ?';
+    db.query(query, [id,user_id], (err, result) => {
         if(err){
             res.status(500).json({error : 'Failed to update task !'});
             return;
         }
-        if(result.affectedRows == 0)
+        if(result.affectedRows === 0)
         {
             res.status(404).json({error:'Task not found !'});
             return;
         }
-        res.status(200).json({message : 'Task updated '});
+        const pointquery = 'update users set points = points+5 where id = ?';
+        db.query(pointquery,[user_id], (err) =>{
+            if(err)
+            {
+                res.status(500).json({error:'Failed to update points!'});
+                return;
+            }
+            res.status(200).json({message :'Task updated, points updated successfuly!'});
+        });
     });
 });
 
@@ -86,16 +95,64 @@ router.delete('/tasks/:id',authentication ,(req, res) => {
 
 router.put('/tasks/:id/undo', authentication, (req,res) => {
     const {id} = req.params;
-    const query = 'update tasks set done = false where id = ?';
-    db.query(query, [id],(err, result)  => {
+    const user_id = req.user.id;
+    const query = 'update tasks set done = false where id = ? and user_id = ?';
+    db.query(query, [id,user_id],(err, result)  => {
         if(err)
         {
-            res.status(500).json({erro: 'Failed to undo task!'});
+            res.status(500).json({error: 'Failed to undo task!'});
             return;
         }
-        res.status(200).json({message: 'Task undone'});
+        const pointquery = 'update users set points = points-5 where id = ?';
+        db.query(pointquery, [user_id], (err) =>{
+            if(err)
+            {
+                res.status(500).json({error:'Failed to update points!'});
+                return;
+            }
+            res.status(200).json({message:'Task undone, Points updated!'});
+        });
     });
 });
+
+router.get('/stats', authentication, (req,res)=>{
+    const user_id = req.user.id;
+    const query = 'select points from users where id = ?';
+    db.query(query,[user_id], (err,result) =>{
+        if(err)
+        {
+            res.status(500).json({err:'failed to fetch stats'});
+            return;
+        }
+        const points = result[0].points;
+        const level = Math.floor(points/25)+1;
+        const pointsLevel = points % 25;
+        const progress = Math.round((pointsLevel/25)*100);
+        res.status(200).json({points, level, pointsLevel, progress});
+    });
+});
+
+// router.post('tasks/:id/complete', authentication, async(req, res) => {
+//     const id = req.params.id;
+//     const user_id = req.user.id;
+//     const check = 'select * from tasks where id = ? AND user_id = ? AND done = false';
+//     db.query(check , [id, user_id], (err,result) => {
+//         if(err){
+//             res.status(500).json({error:'failed to check task!'});
+//             return;
+//         }
+//        if(result.length > 0){
+//         res.status(400).json({error:'Task already exist!'});
+//         return;
+//        }
+//        if(result.length == 0)
+//        {
+//         res.status(404).json({error:'Task not found or already completed !'});
+//         return;
+//        }
+//     })
+
+// });
 
 
 module.exports = router;
