@@ -29,20 +29,30 @@
     </div>
 
     <div id="taskSection" style="display: none;">
-        <div class = "container">
-            <div class="top-bar">
-                <div class="top-bar-left">
-                    <h1>My Tasks</h1>
-                    <p id = "welcomeMessage"></p>
+        <div class = "wrapper">
+            <div class = "container">
+                <div class="top-bar">
+                    <div class="top-bar-left">
+                        <h1>My Tasks</h1>
+                        <p id = "welcomeMessage"></p>
+                    </div>
+                    <button onclick="logout()" class="deleteButton">Logout</button>
                 </div>
-                <button onclick="logout()" class="deleteButton">Logout</button>
-            </div>
 
-            <div class = "input-section">
-                <input type="text" id = "taskInput" placeholder="Enter a task..."/>
-                <button class="add-btn" onclick="addTask()">Add Task</button>   
-             </div>
-        <ul id = "taskList"></ul>
+                <div class = "input-section">
+                    <input type="text" id = "taskInput" placeholder="Enter a task..."/>
+                    <button class="add-btn" onclick="addTask()">Add Task</button>   
+                </div>
+            <ul id = "taskList"></ul>
+            </div>
+            <div class="progress-container">
+                <p id = "level">Level 1</p>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill"></div>
+                    <div class="climber" id="climber">🚩</div>
+                </div>
+                <p id="pointslevel">0 / 25 pts</p>
+            </div>
         </div>
     </div>
     <script src = "app.js"></script>

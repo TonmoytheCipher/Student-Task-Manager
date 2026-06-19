@@ -104,4 +104,47 @@ li {
     display: flex;
     flex-direction: column;
 }
+.wrapper {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.progress-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 80px;
+}
+
+.progress-track {
+    position: relative;
+    width: 20px;
+    height: 300px;
+    background-color: #e5e7eb;
+    border-radius: 10px;
+    margin: 10px auto;
+    overflow: visible;
+}
+
+.progress-fill {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #22c55e;
+    border-radius: 10px;
+    height: 0%;
+    transition: height 0.4s ease;
+}
+
+.climber {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0%;
+    font-size: 20px;
+    transition: bottom 0.4s ease;
+}
 

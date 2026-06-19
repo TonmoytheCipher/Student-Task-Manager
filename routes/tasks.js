@@ -132,27 +132,5 @@ router.get('/stats', authentication, (req,res)=>{
     });
 });
 
-// router.post('tasks/:id/complete', authentication, async(req, res) => {
-//     const id = req.params.id;
-//     const user_id = req.user.id;
-//     const check = 'select * from tasks where id = ? AND user_id = ? AND done = false';
-//     db.query(check , [id, user_id], (err,result) => {
-//         if(err){
-//             res.status(500).json({error:'failed to check task!'});
-//             return;
-//         }
-//        if(result.length > 0){
-//         res.status(400).json({error:'Task already exist!'});
-//         return;
-//        }
-//        if(result.length == 0)
-//        {
-//         res.status(404).json({error:'Task not found or already completed !'});
-//         return;
-//        }
-//     })
-
-// });
-
 
 module.exports = router;

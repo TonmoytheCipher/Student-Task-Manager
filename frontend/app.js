@@ -24,6 +24,7 @@ function login() {
                 document.getElementById('loginUsername').value = '';
                 document.getElementById('loginPassword').value = '';
                 loadTasks();
+                loadStats();
             }
             else
             {
@@ -174,6 +175,7 @@ function markDone(id){
         .then(res => res.json())
         .then(() => {
             loadTasks();
+            loadStats();
         });
 
 }
@@ -187,6 +189,7 @@ function undoTask(id) {
         .then(res => res.json())
         .then(() =>{
             loadTasks();
+            loadStats();
         });
 }
 
@@ -194,6 +197,20 @@ function showWelcome() {
     const token = localStorage.getItem('token');
     const payload = JSON.parse(atob(token.split('.')[1]));
     document.getElementById('welcomeMessage').textContent = `Welcome, ${payload.username}!`;
+}
+function loadStats(){
+    fetch(`${API}/stats`, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('level').textContent = `Level ${data.level}`;
+            document.getElementById('pointslevel').textContent = `${data.pointsLevel}/ 25 pts`;
+            document.getElementById('progressFill').style.height = `${data.progress}`;
+            document.getElementById('climber').style.bottom = `${data.progress}%`;
+        });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -216,5 +233,6 @@ window.onload = () => {
         document.getElementById('authSection').style.display = 'none'; //hide
         document.getElementById('taskSection').style.display = 'block'; //show
         loadTasks();
+        loadStats();
     }
 };
